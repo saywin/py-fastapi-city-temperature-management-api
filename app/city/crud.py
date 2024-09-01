@@ -23,6 +23,12 @@ async def get_city(city_id: int, db: AsyncSession):
     return city
 
 
+async def get_city_by_name(db: AsyncSession, name_city: str) -> DBCity | None:
+    find_city_by_name = select(DBCity).where(DBCity.city == name_city)
+    result = await db.execute(find_city_by_name)
+    return result.scalar_one_or_none()
+
+
 async def create_city(db: AsyncSession, city: CityCreate) -> DBCity:
     new_city = DBCity(**city.dict())
     db.add(new_city)

@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.city import schemas, crud
 from app.dependencies import get_session
 
-router = APIRouter()
+router = APIRouter(tags=["Cities"])
 
 
 @router.get("/", response_model=list[schemas.City])
@@ -21,6 +21,12 @@ async def read_city(id: int, db: AsyncSession = Depends(get_session)):
 async def add_city(
     city: schemas.CityCreate, db: AsyncSession = Depends(get_session)
 ):
+    result = await crud.get_city_by_name(db=db, name_city=city.city)
+    if result:
+        raise HTTPException(
+            status_code=400, detail="Such city for City already exist"
+        )
+
     city = await crud.create_city(db=db, city=city)
     await db.commit()
     return city
