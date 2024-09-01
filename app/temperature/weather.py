@@ -1,5 +1,4 @@
 import httpx
-from fastapi import HTTPException
 from httpx import HTTPStatusError
 
 from app.core.config import settings
@@ -17,4 +16,3 @@ async def fetch_temperature_data(city_name: str) -> float:
     except HTTPStatusError as http_err:
         print(f"HTTP error: {http_err} for city {city_name}")
     return 0.0
-

@@ -6,7 +6,7 @@ from app.city.models import DBCity
 from app.city.schemas import City
 from app.dependencies import get_session
 from app.temperature import schemas
-from app.temperature.crud import update_temperature
+from app.temperature.crud import create_temp_record
 from app.temperature.weather import fetch_temperature_data
 
 router = APIRouter(tags=["Temperature"])
@@ -20,12 +20,12 @@ async def temp_update(db: AsyncSession = Depends(get_session)):
 
     for city in cities:
         temp = await fetch_temperature_data(city.city)
-        await update_temperature(city_id=city.id, new_temperature=temp, db=db)
-
+        created_entry = await create_temp_record(
+            city_id=city.id, temp=temp, db=db)
         updated_cities.append({
-            "city_id": city.id,
-            "temperature": temp,
-            "date_time": "2024-09-01T12:00:00Z"
+            "city_id": created_entry.city_id,
+            "temperature": created_entry.temperature,
+            "date_time": created_entry.date_time
         })
-    return updated_cities
 
+    return updated_cities
