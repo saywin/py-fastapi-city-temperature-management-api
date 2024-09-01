@@ -12,26 +12,29 @@ async def read_cities(db: AsyncSession = Depends(get_session)):
     return await crud.get_all_city(db=db)
 
 
+@router.get("/{city_id}/", response_model=schemas.City)
+async def read_city(id: int, db: AsyncSession = Depends(get_session)):
+    return await crud.get_city(city_id=id, db=db)
+
+
 @router.post("/", response_model=schemas.CityCreate)
 async def add_city(
-        city: schemas.CityCreate,
-        db: AsyncSession = Depends(get_session)
+    city: schemas.CityCreate, db: AsyncSession = Depends(get_session)
 ):
-    city = await crud.create_city(
-        db=db,
-        city=city
-    )
+    city = await crud.create_city(db=db, city=city)
     await db.commit()
     return city
 
 
 @router.put("/{city_id}/update/", response_model=schemas.CityUpdate)
-async def update_city(id: int, city: schemas.CityUpdate, db: AsyncSession = Depends(get_session)):
+async def update_city(
+    id: int, city: schemas.CityUpdate, db: AsyncSession = Depends(get_session)
+):
     city = await crud.update_city(
         city_id=id,
         new_city=city.city,
         additional_info=city.additional_info,
-        db=db
+        db=db,
     )
     return city
 
