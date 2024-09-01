@@ -19,10 +19,17 @@ async def create_temp_record(db: AsyncSession, city_id: int, temp: float) -> DBT
         return temp_entry
 
 
-async def get_temp(db: AsyncSession) -> [DBTemperature]:
+async def get_all_temp(db: AsyncSession) -> [DBTemperature]:
     result = await db.execute(select(DBTemperature))
     temperatures = result.scalars().all()
     return temperatures
+
+
+async def get_temp_for_city(id_city, db: AsyncSession) -> [DBTemperature]:
+    result = select(DBTemperature).where(DBTemperature.city_id == id_city)
+    temperatures_city = await db.execute(result)
+    return temperatures_city.scalars()
+
 
 
 
