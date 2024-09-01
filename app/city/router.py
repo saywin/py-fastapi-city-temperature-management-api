@@ -23,3 +23,14 @@ async def add_city(
     )
     await db.commit()
     return city
+
+
+@router.put("/{city_id}/update/", response_model=schemas.CityUpdate)
+async def update_city(id: int, city: schemas.CityUpdate, db: AsyncSession = Depends(get_session)):
+    city = await crud.update_city(
+        city_id=id,
+        new_city=city.city,
+        additional_info=city.additional_info,
+        db=db
+    )
+    return city
