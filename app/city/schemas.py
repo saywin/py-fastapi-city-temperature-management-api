@@ -12,3 +12,7 @@ class City(CityBase):
 
 class CityCreate(CityBase):
     pass
+
+
+class CityUpdate(CityBase):
+    pass
