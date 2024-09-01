@@ -13,4 +13,4 @@ app.include_router(temp_router, prefix="/temperatures")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "City and Temperature Management API"}

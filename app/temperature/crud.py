@@ -6,7 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.temperature.models import DBTemperature
 
 
-async def create_temp_record(db: AsyncSession, city_id: int, temp: float) -> DBTemperature:
+async def create_temp_record(
+        db: AsyncSession, city_id: int, temp: float
+) -> DBTemperature:
     async with db:
         temp_entry = DBTemperature(
             city_id=city_id,
@@ -29,7 +31,3 @@ async def get_temp_for_city(id_city, db: AsyncSession) -> [DBTemperature]:
     result = select(DBTemperature).where(DBTemperature.city_id == id_city)
     temperatures_city = await db.execute(result)
     return temperatures_city.scalars()
-
-
-
-

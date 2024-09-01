@@ -12,7 +12,7 @@ async def get_all_city(db: AsyncSession) -> [City]:
     return cities
 
 
-async def get_city(city_id: int, db: AsyncSession):
+async def get_city(city_id: int, db: AsyncSession) -> DBCity:
     find_city = select(DBCity).where(DBCity.id == city_id)
     result = await db.execute(find_city)
     city = result.scalar_one_or_none()
