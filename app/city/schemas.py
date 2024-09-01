@@ -15,4 +15,4 @@ class CityCreate(CityBase):
 
 
 class CityUpdate(CityBase):
-    pass
+    id: int

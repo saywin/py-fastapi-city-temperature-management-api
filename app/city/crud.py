@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.city import schemas
 from app.city.models import DBCity
 from app.city.schemas import City, CityCreate
 
@@ -18,3 +19,21 @@ async def create_city(db: AsyncSession, city: CityCreate):
     await db.commit()
     await db.refresh(new_city)
     return new_city
+
+
+async def update_city(db: AsyncSession, city_id: int, new_city: str, additional_info: str):
+    find_city = select(DBCity).where(DBCity.id == city_id)
+    result = await db.execute(find_city)
+    city = result.scalar_one_or_none()
+
+    if city is None:
+        raise HTTPException(
+            status_code=404,
+            detail="City not found"
+        )
+
+    city.city = new_city
+    city.additional_info = additional_info
+    await db.commit()
+
+    return city
