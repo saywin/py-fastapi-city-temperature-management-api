@@ -3,10 +3,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.city.models import DBCity
-from app.city.schemas import City
 from app.dependencies import get_session
 from app.temperature import schemas
-from app.temperature.crud import create_temp_record
+from app.temperature.crud import create_temp_record, get_temp
 from app.temperature.weather import fetch_temperature_data
 
 router = APIRouter(tags=["Temperature"])
@@ -29,3 +28,8 @@ async def temp_update(db: AsyncSession = Depends(get_session)):
         })
 
     return updated_cities
+
+
+@router.get("/", response_model=list[schemas.TemperatureRead])
+async def read_temp(db: AsyncSession = Depends(get_session)):
+    return await get_temp(db=db)
