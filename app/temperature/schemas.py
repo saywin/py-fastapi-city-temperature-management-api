@@ -15,3 +15,6 @@ class TemperatureUpdate(TemperatureBase):
 
 class TemperatureRead(TemperatureBase):
     id: int
+
+    class Config:
+        from_attributes = True

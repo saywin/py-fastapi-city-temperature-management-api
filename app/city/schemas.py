@@ -9,6 +9,9 @@ class CityBase(BaseModel):
 class City(CityBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class CityCreate(CityBase):
     pass
