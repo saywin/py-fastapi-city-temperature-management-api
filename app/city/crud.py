@@ -37,3 +37,22 @@ async def update_city(db: AsyncSession, city_id: int, new_city: str, additional_
     await db.commit()
 
     return city
+
+
+async def delete_city(city_id: int, db: AsyncSession):
+    find_city = select(DBCity).where(DBCity.id == city_id)
+    result = await db.execute(find_city)
+    city = result.scalar_one_or_none()
+
+    if city is None:
+        raise HTTPException(
+            status_code=404,
+            detail="City not found"
+        )
+
+    await db.delete(city)
+    await db.commit()
+
+    return city
+
+
