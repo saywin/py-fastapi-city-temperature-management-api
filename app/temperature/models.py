@@ -7,8 +7,8 @@ from app.db import Base
 class DBTemperature(Base):
     __tablename__ = "temperature"
 
-    id = Column(Integer(), primary_key=True, index=True)
-    city_id = Column(Integer(), ForeignKey("city.id"))
+    id = Column(Integer, primary_key=True, index=True)
+    city_id = Column(Integer, ForeignKey("city.id"))
     date_time = Column(DateTime)
     temperature = Column(Float)
 
